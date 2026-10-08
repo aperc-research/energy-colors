@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>APERC Energy Colors</title>
+<meta name="description" content="Reference palette for data visualization colors used across the APEC EBT dashboard — fuels, sectors, regions, and economies.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#F7F7F8; --sidebar-bg:#FFFFFF; --card-bg:#FFFFFF; --border:#E3E4E8;
+  --ink:#1B1D22; --muted:#6B7280; --accent:#2563EB;
+  --tag-bg:#F1F2F5; --tag-fg:#42454C;
+  --warn-bg:#FEE2E2; --warn-fg:#991B1B;
+  --inherit-bg:#E0E7FF; --inherit-fg:#3730A3;
+}
+:root[data-theme="dark"]{
+  --bg:#15161A; --sidebar-bg:#1B1D22; --card-bg:#1F2127; --border:#2C2F36;
+  --ink:#EDEEF0; --muted:#9AA0AC; --accent:#60A5FA;
+  --tag-bg:#2A2D34; --tag-fg:#C7CAD1;
+  --warn-bg:#3A1414; --warn-fg:#F49999;
+  --inherit-bg:#242A4A; --inherit-fg:#B3BAF6;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg);}
+a{color:inherit;}
+
+.app{display:flex;min-height:100vh;}
+
+/* ---------- sidebar ---------- */
+.sidebar{
+  width:270px;flex-shrink:0;background:var(--sidebar-bg);border-right:1px solid var(--border);
+  overflow-y:auto;transition:margin-left .22s ease,transform .22s ease;
+}
+body:not(.sidebar-open) .sidebar{margin-left:-270px;}
+.sidebar-inner{padding:16px 10px 40px;}
+.sidebar h2{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:18px 10px 6px;}
+.sidebar h2:first-child{margin-top:4px;}
+.nav-subheading{font-size:.74rem;color:var(--muted);padding:6px 10px 2px 10px;}
+.nav-btn{
+  display:block;width:100%;text-align:left;background:none;border:none;color:var(--ink);
+  font:inherit;font-size:.84rem;padding:6px 10px 6px 20px;border-radius:8px;cursor:pointer;
+  text-decoration:none;
+}
+.nav-divider{border:none;border-top:1px solid var(--border);margin:16px 10px;}
+.nav-btn.top{padding-left:10px;font-weight:600;}
+.nav-btn.nested{padding-left:20px;}
+.nav-btn.heading{
+  font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+  margin-top:14px;padding-left:10px;
+}
+.nav-btn:hover{background:var(--tag-bg);}
+.nav-btn.active{background:var(--accent);color:#fff;}
+
+.backdrop{display:none;}
+@media (max-width:800px){
+  .sidebar{position:fixed;top:0;left:0;bottom:0;z-index:40;margin-left:0;transform:translateX(-100%);box-shadow:0 8px 30px rgba(0,0,0,.35);}
+  body.sidebar-open .sidebar{transform:translateX(0);}
+  .backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:30;}
+  body.sidebar-open .backdrop{display:block;}
+}
+
+/* ---------- main ---------- */
+.main{flex:1;min-width:0;}
+.topbar{
+  display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--border);
+  position:sticky;top:0;background:var(--bg);z-index:10;
+}
+.icon-btn{background:none;border:1px solid var(--border);border-radius:8px;width:34px;height:34px;font-size:1rem;cursor:pointer;color:var(--ink);}
+.icon-btn:hover{background:var(--tag-bg);}
+.topbar .brand{font-weight:700;font-size:.95rem;}
+.topbar .brand span{color:var(--muted);font-weight:400;}
+
+.content{padding:26px 24px 60px;max-width:1200px;}
+.section-header h1{margin:0 0 6px;font-size:1.35rem;}
+.section-desc{margin:0 0 10px;color:var(--muted);font-size:.9rem;max-width:70ch;line-height:1.5;}
+.section-badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:22px;}
+.badge{font-size:.72rem;padding:3px 9px;border-radius:999px;background:var(--tag-bg);color:var(--tag-fg);}
+
+/* ---------- swatch grid ---------- */
+.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;}
+@media (max-width:1400px){.grid{grid-template-columns:repeat(4,minmax(0,1fr));}}
+@media (max-width:1100px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
+@media (max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media (max-width:520px){.grid{grid-template-columns:1fr;}}
+.card{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card-bg);cursor:pointer;transition:transform .12s,box-shadow .12s;}
+.card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.10);}
+.swatch{height:60px;}
+.card-body{padding:10px 12px 12px;}
+.card-title{font-weight:600;font-size:.88rem;line-height:1.25;}
+.card-hex{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.76rem;color:var(--muted);margin-top:2px;}
+.card-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;}
+.tag{font-size:.65rem;padding:2px 7px;border-radius:999px;background:var(--tag-bg);color:var(--tag-fg);white-space:nowrap;}
+.tag.warn{background:var(--warn-bg);color:var(--warn-fg);}
+.tag.inherit{background:var(--inherit-bg);color:var(--inherit-fg);}
+.card-regex{
+  margin-top:8px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.65rem;color:var(--muted);
+  opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+.notes-list{margin:0;padding-left:1.1em;color:var(--ink);font-size:.88rem;line-height:1.6;max-width:75ch;}
+.notes-list li{margin-bottom:8px;}
+</style>
+</head>
+<body class="sidebar-open">
+
+<div class="app">
+  <div class="backdrop" id="backdrop"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-inner" id="nav"><!-- built by script --></div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <button class="icon-btn" id="sidebarToggle" aria-label="Toggle sidebar">&#9776;</button>
+      <div class="brand">APERC Energy Colors <span>&middot; dashboard palette reference</span></div>
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle light/dark theme" style="margin-left:auto;">&#9789;</button>
+    </div>
+    <div class="content">
+      <div class="section-header" id="sectionHeader"></div>
+      <div class="grid" id="grid"></div>
+      <div id="extra"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let DATA = null;
+
+function el(tag, attrs, children){
+  const node = document.createElement(tag);
+  for (const k in (attrs || {})) {
+    if (k === 'class') node.className = attrs[k];
+    else if (k === 'style') node.setAttribute('style', attrs[k]);
+    else node.setAttribute(k, attrs[k]);
+  }
+  (children === undefined ? [] : [].concat(children)).forEach(c => {
+    node.append(c instanceof Node ? c : document.createTextNode(c));
+  });
+  return node;
+}
+
+function tag(text, cls){ return el('span', {class:'tag' + (cls ? ' ' + cls : '')}, text); }
+
+function shortCode(code){ return code.replace(/^\d+/, ''); }
+
+/* ---------- data resolution ---------- */
+
+function resolveHex(item, baseList){
+  if (item.hex) return item.hex;
+  if (item.inherits_from && baseList){
+    const base = baseList.find(b => b.code === item.inherits_from);
+    if (base) return base.hex;
+  }
+  return '#999999';
+}
+
+// Turns a nav path like "fuels.aggregate.Power" into the items to render
+// plus header metadata, without any per-category color values hardcoded here.
+function resolvePath(path){
+  const parts = path.split('.');
+  const category = parts[0];
+  const section = DATA[category];
+
+  if (parts[1] === 'standard'){
+    return {
+      items: section.standard,
+      baseList: null,
+      title: cap(category) + ' — Standard',
+      description: section.description,
+      usedIn: section.used_in,
+    };
+  }
+  if (parts[1] === 'aggregate'){
+    const schemeName = parts.slice(2).join('.');
+    const scheme = section.aggregate[schemeName];
+    return {
+      items: scheme.fuels,
+      baseList: section.standard,
+      title: cap(category) + ' — ' + schemeName,
+      description: null,
+      usedIn: scheme.used_in,
+    };
+  }
+  if (parts[1] === 'list'){
+    const baseList = category === 'regions' ? DATA.economies.list : null;
+    return {
+      items: section.list,
+      baseList,
+      title: cap(category),
+      description: section.description,
+      usedIn: section.used_in,
+    };
+  }
+}
+
+function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+
+/* ---------- rendering ---------- */
+
+function buildCard(item, baseList){
+  const hex = resolveHex(item, baseList);
+  const title = item.label || item.name || item.code || '—';
+
+  const swatch = el('div', {class:'swatch', style:'background:' + hex});
+  const hexRow = el('div', {class:'card-hex'}, hex);
+  const tagsRow = el('div', {class:'card-tags'});
+
+  if (item.code && item.code !== title) tagsRow.append(tag(item.code));
+  if (item.display) tagsRow.append(tag(item.display));
+  else if (item.family) tagsRow.append(tag(item.family + (item.lightness ? ' · ' + item.lightness : '')));
+  if (item.in_tfec === false) tagsRow.append(tag('TFC only', 'warn'));
+  if (item.inherits_from && baseList){
+    const base = baseList.find(b => b.code === item.inherits_from);
+    tagsRow.append(tag('inherits ' + item.inherits_from + (base ? ' (' + (base.label || base.name) + ')' : ''), 'inherit'));
+  }
+  if (item.members) tagsRow.append(tag('members: ' + item.members.map(shortCode).join(', ')));
+
+  const body = el('div', {class:'card-body'}, [el('div', {class:'card-title'}, title), hexRow, tagsRow]);
+  if (item.regex) body.append(el('div', {class:'card-regex', title: item.regex}, item.regex));
+
+  const card = el('div', {class:'card'}, [swatch, body]);
+  card.addEventListener('click', () => copyHex(hex, hexRow));
+  return card;
+}
+
+function copyHex(hex, hexRow){
+  navigator.clipboard.writeText(hex).then(() => {
+    const original = hexRow.textContent;
+    hexRow.textContent = 'Copied!';
+    setTimeout(() => { hexRow.textContent = original; }, 900);
+  });
+}
+
+function renderSection(path){
+  const r = resolvePath(path);
+
+  const header = el('div', {}, [el('h1', {}, r.title)]);
+  if (r.description) header.append(el('p', {class:'section-desc'}, r.description));
+  const badges = el('div', {class:'section-badges'});
+  (r.usedIn || []).forEach(u => badges.append(tag(u, 'badge')));
+  header.append(badges);
+
+  const sectionHeader = document.getElementById('sectionHeader');
+  sectionHeader.innerHTML = '';
+  sectionHeader.append(header);
+
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  r.items.forEach(item => grid.append(buildCard(item, r.baseList)));
+
+  document.getElementById('extra').innerHTML = '';
+
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.path === path));
+  if (isMobile()) setSidebarOpen(false);
+}
+
+function renderOverview(){
+  const meta = DATA.meta;
+  const header = el('div', {}, [el('h1', {}, meta.title), el('p', {class:'section-desc'}, meta.description)]);
+  const sectionHeader = document.getElementById('sectionHeader');
+  sectionHeader.innerHTML = '';
+  sectionHeader.append(header);
+
+  document.getElementById('grid').innerHTML = '';
+
+  const extra = document.getElementById('extra');
+  extra.innerHTML = '';
+  extra.append(el('h2', {}, 'Notes'));
+  extra.append(el('ul', {class:'notes-list'}, meta.notes.map(n => el('li', {}, n))));
+
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.path === ''));
+  if (isMobile()) setSidebarOpen(false);
+}
+
+/* ---------- sidebar nav ---------- */
+
+function navBtn(path, label, extraClass){
+  const btn = el('button', {class:'nav-btn' + (extraClass ? ' ' + extraClass : ''), 'data-path': path}, label);
+  btn.addEventListener('click', () => path === '' ? renderOverview() : renderSection(path));
+  return btn;
+}
+
+function buildSidebar(){
+  const nav = document.getElementById('nav');
+  nav.innerHTML = '';
+  nav.append(navBtn('', 'Overview', 'top'));
+
+  Object.entries(DATA).forEach(([key, section]) => {
+    if (key === 'meta') return;
+
+    if (section.standard && section.aggregate){
+      nav.append(el('h2', {}, cap(key)));
+      nav.append(navBtn(key + '.standard', 'Standard', 'top'));
+      nav.append(el('div', {class: 'nav-subheading'}, 'Aggregate'));
+      Object.keys(section.aggregate).forEach(schemeName => {
+        nav.append(navBtn(key + '.aggregate.' + schemeName, schemeName, 'nested'));
+      });
+    } else if (section.list){
+      nav.append(navBtn(key + '.list', cap(key), 'top heading'));
+    }
+  });
+
+  nav.append(el('hr', {class: 'nav-divider'}));
+  nav.append(el('a', {class: 'nav-btn top', href: 'colors.json', download: 'colors.json'}, '⬇ Download colors.json'));
+}
+
+/* ---------- sidebar collapse ---------- */
+
+function isMobile(){ return window.matchMedia('(max-width:800px)').matches; }
+
+function setSidebarOpen(open){
+  document.body.classList.toggle('sidebar-open', open);
+  if (!isMobile()) localStorage.setItem('energyColorsSidebarOpen', open ? '1' : '0');
+}
+
+document.getElementById('sidebarToggle').addEventListener('click', () => {
+  setSidebarOpen(!document.body.classList.contains('sidebar-open'));
+});
+document.getElementById('backdrop').addEventListener('click', () => setSidebarOpen(false));
+
+/* ---------- theme ---------- */
+
+function setTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  document.getElementById('themeToggle').textContent = theme === 'dark' ? '☀' : '☽';
+  localStorage.setItem('energyColorsTheme', theme);
+}
+
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  setTheme(current === 'dark' ? 'light' : 'dark');
+});
+
+/* ---------- boot ---------- */
+
+setTheme(localStorage.getItem('energyColorsTheme') || 'light');
+
+fetch('colors.json')
+  .then(r => r.json())
+  .then(data => {
+    DATA = data;
+    const storedOpen = localStorage.getItem('energyColorsSidebarOpen');
+    setSidebarOpen(isMobile() ? false : storedOpen !== '0');
+    buildSidebar();
+    renderOverview();
+  })
+  .catch(err => {
+    document.getElementById('sectionHeader').innerHTML =
+      '<h1>Could not load colors.json</h1><p class="section-desc">' + err + '</p>';
+  });
+</script>
+</body>
+</html>
